@@ -1,0 +1,15 @@
+package com.callforcode.travelbetter.service;
+
+import org.springframework.context.annotation.Bean;
+
+import com.cloudant.client.api.CloudantClient;
+import com.cloudant.client.api.Database;
+
+
+public class DatabaseBean {
+	
+	@Bean
+	public Database getDB(CloudantClient cloudant) {
+		return cloudant.database("travelbetter", true);
+	}
+}
