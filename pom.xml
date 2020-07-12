@@ -2,16 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.1.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+	
 	<groupId>com.callforcode</groupId>
 	<artifactId>travelbetter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>travelbetter</name>
+	<packaging>jar</packaging>
 	<description>Travel Better Application</description>
 
 	<properties>
@@ -40,13 +36,20 @@
 		    <version>2.3.1.RELEASE</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-commons</artifactId>
+		    <version>2.3.1.RELEASE</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<version>2.3.1.RELEASE</version>
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
@@ -54,6 +57,16 @@
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+		   <groupId>io.springfox</groupId>
+		   <artifactId>springfox-swagger2</artifactId>
+		   <version>2.8.0</version>
+		</dependency>
+		<dependency>
+		   <groupId>io.springfox</groupId>
+		   <artifactId>springfox-swagger-ui</artifactId>
+		   <version>2.8.0</version>
 		</dependency>
 	</dependencies>
 
@@ -63,6 +76,42 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+				<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>false</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<!-- Set a JDK compiler level -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+
+			<!-- Make this jar executable -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+				  <archive>
+					<manifest>
+						<!-- Jar file entry point -->
+						<mainClass>com.callforcode.travelbetter.TravelbetterApplication</mainClass>
+					</manifest>
+				  </archive>
+				</configuration>
+			</plugin>
+	
 		</plugins>
 	</build>
 

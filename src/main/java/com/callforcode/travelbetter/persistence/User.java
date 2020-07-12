@@ -1,5 +1,10 @@
 package com.callforcode.travelbetter.persistence;
 
+import java.time.Instant;
+import java.util.Date;
+
+import org.springframework.data.annotation.ReadOnlyProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,5 +37,16 @@ public class User {
     
     @NonNull
     private String address;
+    
+    @NonNull
+    private String email;
+    
+    @NonNull
+    private String bio;
+    
+    @NonNull
+    @ReadOnlyProperty
+    @Builder.Default
+    private Date joinedDate = Date.from(Instant.now());
  
 }

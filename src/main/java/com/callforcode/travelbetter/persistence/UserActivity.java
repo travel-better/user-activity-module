@@ -1,7 +1,7 @@
 package com.callforcode.travelbetter.persistence;
 
 import java.util.Date;
-
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Setter;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 
 @Getter
@@ -25,7 +26,9 @@ import lombok.Setter;
 public class UserActivity {
 	
 	@NonNull
-    private String id;
+	@ReadOnlyProperty
+	@Builder.Default
+    private String id = UUID.randomUUID().toString();
  
     @NonNull
     private String userId;
@@ -40,6 +43,6 @@ public class UserActivity {
     
     private Integer activityRewards;
     
-    private Boolean rewardsRedeemed;
+    private Boolean isRewardRedeemed;
  
 }
