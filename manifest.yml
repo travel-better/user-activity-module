@@ -1,0 +1,7 @@
+applications:
+- name: travelbetter
+  path: target/travelbetter-0.0.1-SNAPSHOT.war
+  route: travelbetter.bluemix.net
+  memory: 256M
+  env:
+    ENVIRONMENT_MESSAGE: Hello from the Cloud Travel Better

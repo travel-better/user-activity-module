@@ -2,12 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-	<groupId>com.callforcode</groupId>
+  	<parent>
+    	<groupId>org.springframework.boot</groupId>
+    	<artifactId>spring-boot-starter-parent</artifactId>
+    	<version>2.3.1.RELEASE</version>
+	</parent>
+	<groupId>com.callforcode.travelbetter</groupId>
 	<artifactId>travelbetter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>travelbetter</name>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<description>Travel Better Application</description>
 
 	<properties>
@@ -26,10 +30,11 @@
 		    <version>0.0.4</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-jetty</artifactId>
-		    <version>2.3.1.RELEASE</version>
-		</dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-tomcat</artifactId>
+        	<version>2.3.1.RELEASE</version>
+        	<scope>provided</scope>
+    	</dependency>
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-actuator</artifactId>
@@ -75,6 +80,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+                   <executions>
+                       <execution>
+                           <goals>
+                               <goal>repackage</goal>
+                           </goals>
+                       </execution>
+                   </executions>
 			</plugin>
 			
 				<plugin>
@@ -95,20 +107,6 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-
-			<!-- Make this jar executable -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-				  <archive>
-					<manifest>
-						<!-- Jar file entry point -->
-						<mainClass>com.callforcode.travelbetter.TravelbetterApplication</mainClass>
-					</manifest>
-				  </archive>
 				</configuration>
 			</plugin>
 	
