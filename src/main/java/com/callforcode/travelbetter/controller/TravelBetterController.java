@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import com.callforcode.travelbetter.persistence.User;
 import com.callforcode.travelbetter.persistence.UserActivity;
 import com.callforcode.travelbetter.persistence.UserActivityResponse;
 import com.callforcode.travelbetter.repo.Utils;
+import com.callforcode.travelbetter.service.DatabaseBean;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import com.cloudant.client.api.model.Response;
@@ -39,6 +41,9 @@ public class TravelBetterController {
 	@Autowired
 	private CloudantClient client;
 	
+    @Autowired
+    DatabaseBean databaseBean;
+    
 	@GetMapping("cloudant")
 	String cloudant() {
 		List<String> list = new ArrayList<>();
@@ -57,8 +62,9 @@ public class TravelBetterController {
 			throw new BadArgumentException("Null input.");
 		}
 		
-		Response r=  getDB(client).post(user);
+		Response r=  databaseBean.getDB(client).post(user);
 			return User.builder().id(user.getId())
+					.password(user.getPassword())
 					.address(user.getAddress())
 					.firstName(user.getFirstName())
 					.lastName(user.getLastName())
@@ -76,7 +82,7 @@ public class TravelBetterController {
 				throw new BadArgumentException("Invalid input.");
 			}
 			//get user
-			List<User> allUsers = getDB(client).getAllDocsRequestBuilder().includeDocs(true).build().getResponse().getDocsAs(User.class);
+			List<User> allUsers = databaseBean.getDB(client).getAllDocsRequestBuilder().includeDocs(true).build().getResponse().getDocsAs(User.class);
 			if (allUsers == null || allUsers.isEmpty()) {
 				log.error("User not found");
 				throw new NotFoundException("User [" + userId +"] not found");
@@ -98,7 +104,7 @@ public class TravelBetterController {
 				throw new TravelBetterException("Error mapping user");
 			}
 	
-			Response r=  getDB(client).post(user);
+			Response r=  databaseBean.getDB(client).post(user);
 			return User.builder().id(userId)
 					.address(user.getAddress())
 					.firstName(user.getFirstName())
@@ -121,7 +127,7 @@ public class TravelBetterController {
 		}
 		
 		try {
-			List<User> allUsers = getDB(client).getAllDocsRequestBuilder().includeDocs(true).build().getResponse().getDocsAs(User.class);
+			List<User> allUsers = databaseBean.getDB(client).getAllDocsRequestBuilder().includeDocs(true).build().getResponse().getDocsAs(User.class);
 			if (allUsers == null || allUsers.isEmpty()) {
 					log.error("User not found");
 					throw new NotFoundException("User [" + userId +"] not found");
@@ -143,7 +149,7 @@ public class TravelBetterController {
 				throw new BadArgumentException("Invalid input.");
 			}
 			//get user
-			List<User> allUsers = getDB(client).getAllDocsRequestBuilder().includeDocs(true).build().getResponse().getDocsAs(User.class);
+			List<User> allUsers = databaseBean.getDB(client).getAllDocsRequestBuilder().includeDocs(true).build().getResponse().getDocsAs(User.class);
 			if (allUsers == null || allUsers.isEmpty()) {
 				log.error("User not found");
 				throw new NotFoundException("User [" + userId +"] not found");
@@ -159,7 +165,7 @@ public class TravelBetterController {
 			}
 			
 			//delete user
-			getDB(client).remove(internalUser);
+			databaseBean.getDB(client).remove(internalUser);
 			
 		} catch (Exception e) {
 			log.error("error " + e.getMessage());
@@ -173,7 +179,7 @@ public class TravelBetterController {
 			throw new BadArgumentException("Null input.");
 		}
 		
-		Response r=  getDB(client).post(userActivity);
+		Response r=  databaseBean.getDB(client).post(userActivity);
 		return UserActivity.builder()
 				.id(r.getId()).activityRewards(userActivity.getActivityRewards())
 				.activityEndDate(userActivity.getActivityEndDate())
@@ -189,7 +195,7 @@ public class TravelBetterController {
 											   @RequestParam(required = false) Date endDate) {
 		//list user activities
 		try {
-			List<UserActivity> allUsersActivities = getDB(client).getAllDocsRequestBuilder().includeDocs(true).build().getResponse().getDocsAs(UserActivity.class);
+			List<UserActivity> allUsersActivities = databaseBean.getDB(client).getAllDocsRequestBuilder().includeDocs(true).build().getResponse().getDocsAs(UserActivity.class);
 			if (allUsersActivities == null || allUsersActivities.isEmpty()) {
 				log.error("No UserActivities found for user [" +userId +"]" );
 				throw new NotFoundException("No UserActivities found for user [" +userId +"]" );
@@ -206,8 +212,8 @@ public class TravelBetterController {
 		}
 	}
 	
-	@Bean
-	public Database getDB(CloudantClient cloudant) {
-		return cloudant.database("travelbetter", true);
-	}
+	//@Bean
+//	public Database getDB(CloudantClient cloudant) {
+//		return cloudant.database("travelbetter", true);
+//	}
 }
